@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset=utf-8>
+		<title>My first Three.js app</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+		<script src="node_modules/three.js/node_modules/three/three.js"></script>
+    <script>
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+    var light = new THREE.AmbientLight( 0x404040 ); // soft white light
+    scene.add( light );
+
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    document.body.appendChild( renderer.domElement );
+
+    // instantiate a loader
+    var loader = new THREE.TextureLoader();
+
+    var materials = [];
+
+    m1 = loader.load( 'cube_sides_images/num_1.png');
+    materials.push(new THREE.MeshBasicMaterial( { map: m1}));
+    m2 = loader.load( 'cube_sides_images/num_2.png');
+    materials.push(new THREE.MeshBasicMaterial( { map: m2 }));
+    m3 = loader.load( 'cube_sides_images/num_3.png');
+    materials.push(new THREE.MeshBasicMaterial( { map: m3 }));
+    m4 = loader.load( 'cube_sides_images/num_4.png');
+    materials.push(new THREE.MeshBasicMaterial( { map: m4 }));
+    m5 = loader.load( 'cube_sides_images/num_5.png');
+    materials.push(new THREE.MeshBasicMaterial( { map: m5 }));
+    m6 = loader.load( 'cube_sides_images/num_6.png');
+    materials.push(new THREE.MeshBasicMaterial( { map: m6 }));
+
+
+
+
+    // var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+    var diceMaterials = new THREE.MeshFaceMaterial(materials);
+
+    var diceGeometry  = new THREE.CubeGeometry(40, 40, 40, 1, 1, 1);
+
+    dice = new THREE.Mesh(diceGeometry, diceMaterials);
+
+
+
+    // dice = new THREE.Mesh(
+    //         new THREE.CubeGeometry(562, 562, 562, 1, 1, 1, materials),
+    //         new THREE.MeshFaceMaterial());
+
+    scene.add(dice);
+    camera.position.z = 150;
+
+    v = {
+      x: Math.round(Math.random() * 100) / 100.0,
+      y: Math.round(Math.random() * 100) / 100.0,
+      z: Math.round(Math.random() * 100) / 100.0,
+    };
+
+    var render = function () {
+      requestAnimationFrame( render );
+
+      if (v.x < 0.005 && (dice.rotation.x % 3.1415 < 0.0001 || dice.rotation.x % 3.1415 > -0.0001)) v.x = 0;
+      // if (v.y < 0.005 && (dice.rotation.y % 3.1415 < 0.01 || dice.rotation.y % 3.1415 > -0.01)) v.y = 0;
+      // if (v.z < 0.005 && (dice.rotation.z % 3.1415 < 0.01 || dice.rotation.z % 3.1415 > -0.01)) v.z = 0;
+
+      if (v.x != 0) dice.rotation.x += v.x;
+      // if (v.y > 0.001) dice.rotation.y += v.y;
+      // if (v.z > 0.001) dice.rotation.z += v.z;
+
+      if(v.x > 0) v.x -= 0.01;
+      // if(v.y > 0) v.y -= 0.01;
+      // if(v.z > 0) v.z -= 0.01;
+      //
+      // console.log(v.x + ' => ' + dice.rotation.x);
+
+      // dice.rotation.x = 2.5;
+
+      renderer.render(scene, camera);
+    };
+
+    render();
+
+		</script>
+	</body>
+</html>
